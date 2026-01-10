@@ -4,15 +4,30 @@ import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.test_movie_app.ui.theme.main_screen.MainScreenBody
+import com.example.test_movie_app.ui.theme.main_screen.MainScreenVM
 import com.example.test_movie_app.ui.theme.navigation.BottomNavLine
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavScreen(selectedItem: MutableState<String>, navController: NavController) {
+fun FavScreen(
+    selectedItem: MutableState<String>,
+    onFavMovieChange: (Int) -> Unit,
+    navController: NavController,
+    viewModel: MainScreenVM = viewModel()
+) {
+
+    val favoriteMovies by remember {
+        derivedStateOf { viewModel.movieList.filter { viewModel.favMovie.contains(it.id) } }
+    }
+
     Scaffold(
         modifier = Modifier.zIndex(100f),
         topBar = {},
@@ -22,8 +37,14 @@ fun FavScreen(selectedItem: MutableState<String>, navController: NavController) 
                 navController = navController
             )
         }
-    ) {  padding ->
+    ) { padding ->
 
-        FavScreenBody()
+        FavScreenBody(
+            onFavMovieChange = { movieId ->
+                viewModel.toggleFavorite(movieId)
+            },
+            favoriteMovies,
+            viewModel = viewModel()
+        )
     }
 }

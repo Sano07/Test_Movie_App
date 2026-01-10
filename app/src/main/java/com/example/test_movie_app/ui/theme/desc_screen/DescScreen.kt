@@ -16,13 +16,9 @@ fun DescScreen(navController: NavController) {
         modifier = Modifier.zIndex(100f),
         topBar = {},
         bottomBar = {
-            BottomNavLine(
-                selectedItem,
-                navController = navController
-            )
         }
     ) {  padding ->
 
-        FavScreenBody()
+        //FavScreenBody()
     }
 }

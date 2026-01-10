@@ -22,18 +22,14 @@ fun BottomNavLine(selectedItem: MutableState<String>, navController : NavControl
                 selected = selectedItem.value == item.title,
                 onClick = {
                     selectedItem.value = item.title
-                    navController.navigate(item.route) {
-                        // чтобы не дублировать экраны в backstack
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigate(item.route)
+
                 },
                 icon = {
                     Icon(painter = painterResource(id = item.iconId), contentDescription = "Icon Logo")
                 },
                 label = {
-                    Text(text = item.title, fontSize = 15.sp)
+                    //Text(text = item.title, fontSize = 15.sp)
                 },
                 colors = NavigationBarItemDefaults.colors(),
             )

@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.test_movie_app.ui.theme.data.MovieDataModel
 import com.example.test_movie_app.ui.theme.navigation.BottomNavLine
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -17,9 +18,9 @@ fun MainScreen(
     favMovie: Set<Int>,
     selectedItem: MutableState<String>,
     navController: NavController,
-    onFavMovieUpdate : (Set<Int>) -> Unit,
+    onFavMovieUpdate: (Set<Int>) -> Unit,
     onFavMovieChange: (Int) -> Unit,
-    selectedMovieForDesc: MutableState<Int?>,
+    selectedMovieForDesc: MutableState<Int?>
 ) {
     Scaffold(
         modifier = Modifier.zIndex(100f),

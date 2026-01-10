@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
 }
 
 android {
@@ -45,7 +46,13 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.androidx.core.ktx)
+    implementation("androidx.room:room-runtime:2.0.0")
+    implementation("androidx.room:room-ktx:2.0.0")
+    implementation(libs.engage.core)
+    kapt("androidx.room:room-compiler:2.0.0")
+
+    implementation("androidx.core:core:1.16.0")
+    implementation("androidx.core:core-ktx:1.16.0")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
