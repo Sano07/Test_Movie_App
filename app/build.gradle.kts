@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.example.test_movie_app"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.test_movie_app"
         minSdk = 30
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -28,17 +28,21 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
 }
+
 
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -46,10 +50,10 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
 
-    implementation("androidx.room:room-runtime:2.0.0")
-    implementation("androidx.room:room-ktx:2.0.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.engage.core)
-    kapt("androidx.room:room-compiler:2.0.0")
 
     implementation("androidx.core:core:1.16.0")
     implementation("androidx.core:core-ktx:1.16.0")

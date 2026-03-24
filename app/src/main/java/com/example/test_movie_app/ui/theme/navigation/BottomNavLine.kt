@@ -4,6 +4,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.painterResource
@@ -29,7 +30,7 @@ fun BottomNavLine(selectedItem: MutableState<String>, navController : NavControl
                     Icon(painter = painterResource(id = item.iconId), contentDescription = "Icon Logo")
                 },
                 label = {
-                    //Text(text = item.title, fontSize = 15.sp)
+                    Text(text = item.title, fontSize = 15.sp)
                 },
                 colors = NavigationBarItemDefaults.colors(),
             )

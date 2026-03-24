@@ -15,24 +15,25 @@ import com.example.test_movie_app.ui.theme.navigation.BottomNavLine
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    favMovie: Set<Int>,
+    viewModel: MainScreenVM,
     selectedItem: MutableState<String>,
     navController: NavController,
-    onFavMovieUpdate: (Set<Int>) -> Unit,
-    onFavMovieChange: (Int) -> Unit,
     selectedMovieForDesc: MutableState<Int?>
 ) {
     Scaffold(
         modifier = Modifier.zIndex(100f),
-        topBar = {},
         bottomBar = {
             BottomNavLine(
-                    selectedItem,
-                    navController = navController
-                )
-            }
-    ) {  padding ->
-
-        MainScreenBody(modifier = Modifier.padding(padding), favMovie, onFavMovieUpdate,onFavMovieChange, navController, selectedMovieForDesc)
+                selectedItem = selectedItem,
+                navController = navController
+            )
+        }
+    ) { padding ->
+        MainScreenBody(
+            modifier = Modifier.padding(padding),
+            navController = navController,
+            selectedMovieForDesc = selectedMovieForDesc,
+            viewModel = viewModel
+        )
     }
 }

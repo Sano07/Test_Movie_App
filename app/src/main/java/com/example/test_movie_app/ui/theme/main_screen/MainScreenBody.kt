@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -44,34 +45,28 @@ import com.example.test_movie_app.ui.theme.data.MovieDataModel
 @Composable
 fun MainScreenBody(
     modifier: Modifier,
-    favMovie: Set<Int>,
-    onFavMovieUpdate: (Set<Int>) -> Unit,
-    onFavMovieChange: (Int) -> Unit,
     navController: NavController,
     selectedMovieForDesc: MutableState<Int?>,
-    viewModel: MainScreenVM = viewModel(),
-
+    viewModel: MainScreenVM
 ) {
-    viewModel.favFilms = favMovie
-
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.loadMovies(context)
     }
 
+    LazyColumn(modifier = modifier) {
+        items(viewModel.movieList) { movie ->
+            val isFav = viewModel.isFavorite(movie.id)
 
-    LazyColumn {
-        itemsIndexed(viewModel.movieList) { _, movie ->
-            val isFav = favMovie.contains(movie.id)
             MovieCard(
-                //modifier,
-                favMovie,
-                onFavMovieChange,
-                movie,
-                isFav,
-                navController,
-                selectedMovieForDesc
+                movie = movie,
+                isFav = isFav,
+                navController = navController,
+                selectedMovieForDesc = selectedMovieForDesc,
+                onFavoriteClick = {
+                    viewModel.toggleFavorite(movie)
+                }
             )
         }
     }
@@ -79,21 +74,19 @@ fun MainScreenBody(
 
 @Composable
 fun MovieCard(
-    //modifier: Modifier,
-    favMovie: Set<Int>,
-    onFavMovieChange: (Int) -> Unit, movie: MovieDataModel,
+    movie: MovieDataModel,
     isFav: Boolean,
     navController: NavController,
     selectedMovieForDesc: MutableState<Int?>,
+    onFavoriteClick: () -> Unit
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 5.dp)
             .clickable {
-                navController.navigate("desc_screen")
                 selectedMovieForDesc.value = movie.id
+                navController.navigate("desc_screen")
             },
         shape = RoundedCornerShape(15.dp)
     ) {
@@ -111,9 +104,10 @@ fun MovieCard(
                         .weight(0.4f)
                         .aspectRatio(2f / 3f)
                         .clip(RoundedCornerShape(8.dp)),
-                    contentDescription = "машинка для примера",
+                    contentDescription = movie.title,
                     contentScale = ContentScale.Crop,
                 )
+
                 Column(
                     modifier = Modifier
                         .weight(0.6f)
@@ -126,15 +120,17 @@ fun MovieCard(
                         color = Color.Black,
                         text = movie.title
                     )
+
                     Text(
                         modifier = Modifier.padding(5.dp),
                         fontSize = 15.sp,
                         color = Color.Black,
                         text = movie.releaseDate
                     )
+
                     Text(
                         modifier = Modifier.padding(5.dp),
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         color = Color.Black,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 5,
@@ -142,19 +138,17 @@ fun MovieCard(
                     )
                 }
             }
+
             IconButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 10.dp),
-                onClick = {
-                    onFavMovieChange(movie.id)
-                },
-                enabled = !favMovie.contains(movie.id),
+                onClick = onFavoriteClick
             ) {
                 Icon(
-                    modifier = Modifier.size(60.dp),
+                    modifier = Modifier.size(40.dp),
                     painter = painterResource(R.drawable.ic_favorite),
-                    contentDescription = "Добавлено в избранное",
+                    contentDescription = "Favorite",
                     tint = if (isFav) Color.Red else Color.Black
                 )
             }

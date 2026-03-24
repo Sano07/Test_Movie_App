@@ -12,28 +12,35 @@ import com.example.test_movie_app.ui.theme.data.MovieDataModel
 import com.example.test_movie_app.ui.theme.fav_screen.FavScreen
 import com.example.test_movie_app.ui.theme.main_screen.MainScreen
 import com.example.test_movie_app.ui.theme.desc_screen.DescScreen
+import com.example.test_movie_app.ui.theme.main_screen.MainScreenVM
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
-fun AppNavigation(
-    favMovie: Set<Int>,
-    onFavMovieUpdate: (Set<Int>) -> Unit,
-    onFavMovieChange: (Int) -> Unit,
-) {
-
+fun AppNavigation(viewModel: MainScreenVM) {
     val navController = rememberNavController()
     val selectedItem = remember { mutableStateOf("home_screen") }
     val selectedMovieForDesc = remember { mutableStateOf<Int?>(null) }
 
     NavHost(navController = navController, startDestination = "home_screen") {
         composable("home_screen") {
-            MainScreen(favMovie, selectedItem, navController, onFavMovieUpdate, onFavMovieChange, selectedMovieForDesc)
+            MainScreen(
+                viewModel = viewModel,
+                selectedItem = selectedItem,
+                navController = navController,
+                selectedMovieForDesc = selectedMovieForDesc
+            )
         }
         composable("favorite_screen") {
-            FavScreen(selectedItem, onFavMovieChange, navController)
+            FavScreen(
+                viewModel = viewModel,
+                selectedItem = selectedItem,
+                navController = navController
+            )
         }
         composable("desc_screen") {
-            DescScreen(navController)
+            DescScreen(
+                viewModel = viewModel,
+                selectedMovieForDesc = selectedMovieForDesc
+            )
         }
     }
 }
