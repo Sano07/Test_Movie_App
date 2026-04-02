@@ -25,18 +25,22 @@ class MainScreenVM(
     private val dao: DaoMovies
 ) : ViewModel() {
 
+    // фильмы полученные с апи колла
     val movieList = mutableStateListOf<MovieDataModel>()
 
+    // патерн работы с данными в вью модел, изменяемая переменная внутри вю модел, НЕ изменяемая наружу
     private val _favoriteMovies = MutableStateFlow<List<MovieEntity>>(emptyList())
     val favoriteMovies: StateFlow<List<MovieEntity>> = _favoriteMovies.asStateFlow()
 
     var favoriteIds by mutableStateOf(setOf<Int>())
         private set
 
+    // при создании вью модел подписк на наблюдение за избранными фильмами
     init {
         observeFavoriteMovies()
     }
 
+    // слежение за обновлением списка избранных, через ФЛОУ, и обновление списка ид избранных фильмов, чтоб перерисовывать UI
     private fun observeFavoriteMovies() {
         viewModelScope.launch {
             dao.getAllMovies().collect { movies ->
@@ -46,15 +50,18 @@ class MainScreenVM(
         }
     }
 
+    // если список фильмов пустой, отправляет ГЕТ запрос для получения списка фильмов
     fun loadMovies(context: Context) {
         if (movieList.isNotEmpty()) return
         apiCall(context)
     }
 
+    // функция проверяет наличие ид фильма в списке избранных
     fun isFavorite(movieId: Int): Boolean {
         return favoriteIds.contains(movieId)
     }
 
+    // функция для добавления, удаления фильмов из избранного
     fun toggleFavorite(movie: MovieDataModel) {
         viewModelScope.launch {
             if (isFavorite(movie.id)) {
@@ -74,12 +81,14 @@ class MainScreenVM(
         }
     }
 
+    // отдельная функция удаления фильма из избранного
     fun deleteFavorite(movieId: Int) {
         viewModelScope.launch {
             dao.deleteById(movieId)
         }
     }
 
+    // апи колл для получения фильмов
     private fun apiCall(context: Context) {
         val apiKey = "9dbc4f311e85cd974cbff94a32ce5657"
         val url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey"
